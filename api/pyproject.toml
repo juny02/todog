@@ -22,6 +22,7 @@ fixable = ["I001", "F401"]
 
 [dependency-groups]
 dev = [
+    "pytest>=8.3.4",
     "ruff>=0.9.3",
 ]
 
