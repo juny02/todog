@@ -1,0 +1,14 @@
+services:
+
+  api:
+    container_name: api
+    build: ./api
+    env_file:
+      - ./api/.env.prod
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      timeout: 5s
+    
+    
