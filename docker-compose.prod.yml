@@ -10,5 +10,15 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       timeout: 5s
+
+    db:
+      container_name: db
+      image: mysql:8.2
+      ports:
+        - 3306:3306
+      volumes:
+        - ./db/mysql/prod:/var/lib/mysql
+      env_file:
+        - ./db/.env.prod
     
     

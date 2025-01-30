@@ -17,5 +17,14 @@ services:
       --host 0.0.0.0
       --port 8080
       --reload
-    
+  
+  db:
+    container_name: db
+    image: mysql:8.2
+    ports:
+      - 3306:3306
+    volumes:
+      - ./db/mysql/dev:/var/lib/mysql
+    env_file:
+      - ./db/.env.dev
     
