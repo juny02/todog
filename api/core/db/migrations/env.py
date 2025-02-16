@@ -3,6 +3,7 @@ from logging.config import fileConfig
 
 from alembic import context
 from sqlalchemy import engine_from_config, pool
+from app.dog.adapter.output.persistence.entities.DogSQLModelEntity import DogSQLModelEntity
 from sqlmodel import SQLModel
 
 # this is the Alembic Config object, which provides
