@@ -1,11 +1,12 @@
-from api.app.dog_family.adapter.output.persistence.repository.DogFamilySQLModelRepository import (
+from fastapi import Depends
+
+from app.dog_family.adapter.output.persistence.repository.DogFamilySQLModelRepository import (
     DogFamilySQLModelRepository,
 )
-from api.app.dog_family.application.port.output.repository.DogFamilyRepository import (
+from app.dog_family.application.port.output.repository.DogFamilyRepository import (
     DogFamilyRepository,
 )
-from api.app.dog_family.domain.DogFamily import DogFamily
-from fastapi import Depends
+from app.dog_family.domain.DogFamily import DogFamily
 
 
 class GetDogFamilyUseCase:

@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from api.app.dog_family.application.port.input.GetDogFamiliesCommand import GetDogFamiliesCommand
-
 from app.dog_family.application.port.input.AddDogFamilyCommand import AddDogFamilyCommand
+from app.dog_family.application.port.input.GetDogFamiliesCommand import GetDogFamiliesCommand
 from app.dog_family.application.port.input.UpdateDogFamilyCommand import UpdateDogFamilyCommand
 from app.dog_family.domain.DogFamily import DogFamily
 
