@@ -1,6 +1,6 @@
 import os
 
-from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel import Session, create_engine
 
 HOST = os.getenv("DB_HOST", None)
 PORT = os.getenv("DB_PORT", None)

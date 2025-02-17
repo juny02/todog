@@ -1,4 +1,3 @@
-from fastapi import Query
 from pydantic import BaseModel, ConfigDict
 
 from app.dog.domain.Dog import DogSpecies
