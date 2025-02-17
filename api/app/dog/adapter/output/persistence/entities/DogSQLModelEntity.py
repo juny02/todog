@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Enum
 from sqlmodel import Field, SQLModel
 
-from core.db.utils.ulid import generate_ulid
 from app.dog.domain.Dog import DogSpecies
+from core.db.utils.ulid import generate_ulid
 
 
 class DogSQLModelEntity(SQLModel, table=True):
