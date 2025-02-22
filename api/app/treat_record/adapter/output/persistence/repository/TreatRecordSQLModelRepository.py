@@ -113,7 +113,7 @@ class TreatRecordSQLModelRepository(TreatRecordRepository):
         if cmd.user_id is not None:
             treat_record.user_id = cmd.user_id
         if cmd.treat_id is not None:
-            treat_record.description = cmd.treat_id
+            treat_record.treat_id = cmd.treat_id
         if cmd.quantity is not None:
             treat_record.quantity = cmd.quantity
         if cmd.given_at is not None:
