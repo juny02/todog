@@ -104,15 +104,15 @@ class TreatRecordSQLModelRepository(TreatRecordRepository):
     async def update(self, cmd: UpdateTreatRecordCommand) -> TreatRecord:
         treat_record = await self._get_by_id_for_dog(id=cmd.id, dog_id=cmd.dog_id)
 
-        if await self.user_repo.get(cmd.user_id) is None:
-            raise UserNotFoundError(f"User with id '{cmd.user_id}' does not exist.")
-
-        if await self.treat_repo.get(id=cmd.treat_id, dog_id=cmd.dog_id) is None:
-            raise TreatNotFoundError(f"Treat with id '{cmd.treat_id}' does not exist.")
-
         if cmd.user_id is not None:
+            if await self.user_repo.get(cmd.user_id) is None:
+                raise UserNotFoundError(f"User with id '{cmd.user_id}' does not exist.")
             treat_record.user_id = cmd.user_id
         if cmd.treat_id is not None:
+            if await self.treat_repo.get(id=cmd.treat_id, dog_id=cmd.dog_id) is None:
+                raise TreatNotFoundError(
+                    f"Treat with id '{cmd.treat_id}' does not exist."
+                )
             treat_record.treat_id = cmd.treat_id
         if cmd.quantity is not None:
             treat_record.quantity = cmd.quantity
