@@ -12,11 +12,11 @@ class TreatRepository(ABC):
         pass
 
     @abstractmethod
-    async def get(self, id: str) -> Treat:
+    async def get(self, id: str, dog_id: str) -> Treat:
         pass
     
     @abstractmethod
-    async def get_by_dog(self, dog_id: str) -> List[Treat]:
+    async def get_all_by_dog(self, dog_id: str) -> List[Treat]:
         pass
 
 
@@ -25,5 +25,5 @@ class TreatRepository(ABC):
         pass
 
     @abstractmethod
-    async def delete(self, id: str) -> None:
+    async def delete(self, id: str, dog_id: str) -> None:
         pass

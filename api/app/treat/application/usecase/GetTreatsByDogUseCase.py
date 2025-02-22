@@ -14,4 +14,4 @@ class GetTreatsByDogUseCase:
         self.treat_repo = treat_repo
     
     async def __call__(self, dog_id: str) -> List[Treat]:
-        return await self.treat_repo.get_by_dog(dog_id)
+        return await self.treat_repo.get_all_by_dog(dog_id)
