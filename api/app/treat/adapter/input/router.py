@@ -1,13 +1,10 @@
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, status
 
-from app.dog.application.error.DogNotFoundError import DogNotFoundError
 from app.treat.adapter.input.api.request.CreateTreatRequest import CreateTreatRequest
 from app.treat.adapter.input.api.request.UpdateTreatRequest import UpdateTreatRequest
 from app.treat.adapter.input.api.response.GetTreatResponse import GetTreatResponse
-from app.treat.application.error.TreatNotFoundError import TreatNotFoundError
-from app.treat.application.error.TreatOwnershipError import TreatOwnershipError
 from app.treat.application.port.input.CreateTreatCommand import CreateTreatCommand
 from app.treat.application.port.input.UpdateTreatCommand import UpdateTreatCommand
 from app.treat.application.usecase.CreateTreatUseCase import CreateTreatUseCase

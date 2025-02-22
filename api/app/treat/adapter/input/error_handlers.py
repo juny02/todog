@@ -1,8 +1,9 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
-from app.treat.application.error.TreatOwnershipError import TreatOwnershipError
-from app.treat.application.error.TreatNotFoundError import TreatNotFoundError
+
 from app.dog.application.error.DogNotFoundError import DogNotFoundError
+from app.treat.application.error.TreatNotFoundError import TreatNotFoundError
+from app.treat.application.error.TreatOwnershipError import TreatOwnershipError
 
 
 async def treat_not_found_handler(request: Request, exc: TreatNotFoundError):
