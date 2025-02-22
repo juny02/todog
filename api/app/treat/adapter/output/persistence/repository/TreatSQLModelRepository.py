@@ -3,6 +3,11 @@ from typing import List
 from fastapi import Depends
 from sqlmodel import Session, select
 
+from app.dog.application.error.DogNotFoundError import DogNotFoundError
+from app.dog.adapter.output.persistence.repository.DogSQLModelRepository import (
+    DogSQLModelRepository,
+)
+from app.dog.application.port.output.repository.DogRepository import DogRepository
 from app.treat.adapter.output.persistence.entities.TreatMapper import TreatMapper
 from app.treat.adapter.output.persistence.entities.TreatSQLModelEntity import (
     TreatSQLModelEntity,
@@ -17,11 +22,20 @@ from core.db.dependency import get_session
 
 class TreatSQLModelRepository(TreatRepository):
 
-    def __init__(self, session: Session = Depends(get_session)):
+    def __init__(
+        self,
+        session: Session = Depends(get_session),
+        dog_repo: DogRepository = Depends(DogSQLModelRepository),
+    ):
         self.mapper = TreatMapper
         self.session = session
+        self.dog_repo = dog_repo
 
     async def create(self, cmd: CreateTreatCommand) -> Treat:
+
+        if await self.dog_repo.get(cmd.dog_id) is None:
+            raise DogNotFoundError(f"Dog with id '{cmd.dog_id}' does not exist.")
+
         treat = TreatSQLModelEntity(
             name=cmd.name, dog_id=cmd.dog_id, description=cmd.description
         )
