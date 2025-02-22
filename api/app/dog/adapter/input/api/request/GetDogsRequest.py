@@ -9,4 +9,4 @@ class GetDogsRequest(BaseModel):
     name: str | None = None
     age: int | None = None
     photo: str | None = None
-    species: DogSpecies | None = None
+    species: str | None = None

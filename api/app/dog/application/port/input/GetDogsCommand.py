@@ -7,4 +7,4 @@ class GetDogsCommand(BaseModel):
     name: str | None
     age: int | None
     photo: str | None
-    species: DogSpecies | None 
+    species: str | None 

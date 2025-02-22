@@ -13,4 +13,4 @@ class DogSQLModelEntity(SQLModel, table=True):
     name: str = Field(nullable=False, max_length=32)
     age: int = Field(nullable=True)
     photo: str = Field(nullable=True, max_length=32)
-    species: DogSpecies = Field(sa_column=Column(Enum(DogSpecies)))
+    species: str = Field(nullable=True, max_length=32)

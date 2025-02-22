@@ -7,4 +7,4 @@ class CreateDogCommand(BaseModel):
     name: str
     age: int | None
     photo: str | None
-    species: DogSpecies | None
+    species: str | None
