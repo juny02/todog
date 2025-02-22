@@ -10,6 +10,8 @@ from app.dog.adapter.output.persistence.entities.DogSQLModelEntity import DogSQL
 from app.treat.adapter.output.persistence.entities.TreatSQLModelEntity import TreatSQLModelEntity
 from app.treat_record.adapter.output.persistence.entities.TreatRecordSQLModelEntity import TreatRecordSQLModelEntity
 from app.walk_record.adapter.output.persistence.entities.WalkRecordSQLModelEntity import WalkRecordSQLModelEntity
+from app.meal_record.adapter.output.persistence.entities.MealRecordSQLModelEntity import MealRecordSQLModelEntity
+
 
 from sqlmodel import SQLModel
 
