@@ -50,8 +50,6 @@ class TreatSQLModelRepository(TreatRepository):
 
         if cmd.name is not None:
             treat.name = cmd.name
-        if cmd.dog_id is not None:
-            treat.dog_id = cmd.dog_id
         if cmd.description is not None:
             treat.description = cmd.description
 
