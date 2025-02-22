@@ -5,4 +5,4 @@ class Treat(BaseModel):
     id: str
     dog_id: str
     name: str
-    description: str
+    description: str | None
