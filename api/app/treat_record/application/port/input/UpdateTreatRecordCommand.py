@@ -10,3 +10,4 @@ class UpdateTreatRecordCommand(BaseModel):
     quantity: int | None
     given_at: AwareDatetime | None
     description: str | None
+    photo_url: str | None

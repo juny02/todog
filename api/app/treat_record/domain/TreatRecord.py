@@ -1,4 +1,4 @@
-from pydantic import AwareDatetime, BaseModel, Field
+from pydantic import AwareDatetime, BaseModel
 
 
 class TreatRecord(BaseModel):
@@ -9,5 +9,6 @@ class TreatRecord(BaseModel):
     quantity: int
     given_at: AwareDatetime
     description: str | None
+    photo_url: str | None
 
 

@@ -8,3 +8,4 @@ class CreateTreatRecordCommand(BaseModel):
     quantity: int
     given_at: AwareDatetime
     description: str | None
+    photo_url: str | None
