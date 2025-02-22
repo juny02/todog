@@ -8,6 +8,8 @@ from app.dog_family.adapter.output.persistence.entities.DogFamilySQLModelEntity 
 from app.user.adapter.output.persistence.entities.UserSQLModelEntity import UserSQLModelEntity
 from app.dog.adapter.output.persistence.entities.DogSQLModelEntity import DogSQLModelEntity
 from app.treat.adapter.output.persistence.entities.TreatSQLModelEntity import TreatSQLModelEntity
+from app.treat_record.adapter.output.persistence.entities.TreatRecordSQLModelEntity import TreatRecordSQLModelEntity
+
 from sqlmodel import SQLModel
 
 # this is the Alembic Config object, which provides
