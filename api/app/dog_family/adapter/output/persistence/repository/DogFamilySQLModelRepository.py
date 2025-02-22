@@ -59,7 +59,6 @@ class DogFamilySQLModelRepository(DogFamilyRepository):
 
     async def create(self, cmd: AddDogFamilyCommand) -> DogFamily:
         if await self.dog_repo.get(cmd.dog_id) is None:
-            print("hiihihi")
             raise DogNotFoundError(f"Dog with id '{cmd.dog_id}' does not exist.")
         if await self.user_repo.get(cmd.user_id) is None:
             raise UserNotFoundError(f"User with id '{cmd.user_id}' does not exist.")
