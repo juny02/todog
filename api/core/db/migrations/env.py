@@ -9,6 +9,7 @@ from app.user.adapter.output.persistence.entities.UserSQLModelEntity import User
 from app.dog.adapter.output.persistence.entities.DogSQLModelEntity import DogSQLModelEntity
 from app.treat.adapter.output.persistence.entities.TreatSQLModelEntity import TreatSQLModelEntity
 from app.treat_record.adapter.output.persistence.entities.TreatRecordSQLModelEntity import TreatRecordSQLModelEntity
+from app.walk_record.adapter.output.persistence.entities.WalkRecordSQLModelEntity import WalkRecordSQLModelEntity
 
 from sqlmodel import SQLModel
 
