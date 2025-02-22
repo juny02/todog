@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Enum
 from sqlmodel import Field, SQLModel
 
-from app.dog.domain.Dog import DogSpecies
+from app.dog.domain.Dog import DogMealPattern
 from core.db.utils.ulid import generate_ulid
 
 
@@ -14,3 +14,5 @@ class DogSQLModelEntity(SQLModel, table=True):
     age: int = Field(nullable=True)
     photo: str = Field(nullable=True, max_length=32)
     species: str = Field(nullable=True, max_length=32)
+    daily_walk_goal: int = Field(nullable=False)
+    meal_pattern: DogMealPattern = Field(sa_column=Column(Enum(DogMealPattern)))

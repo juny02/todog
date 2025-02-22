@@ -4,7 +4,9 @@ from fastapi import Depends
 from sqlmodel import Session, select
 
 from app.dog.adapter.output.persistence.entities.DogMapper import DogMapper
-from app.dog.adapter.output.persistence.entities.DogSQLModelEntity import DogSQLModelEntity
+from app.dog.adapter.output.persistence.entities.DogSQLModelEntity import (
+    DogSQLModelEntity,
+)
 from app.dog.application.error.DogNotFoundError import DogNotFoundError
 from app.dog.application.port.input.CreateDogCommand import CreateDogCommand
 from app.dog.application.port.input.GetDogsCommand import GetDogsCommand
@@ -22,7 +24,12 @@ class DogSQLModelRepository(DogRepository):
 
     async def create(self, cmd: CreateDogCommand) -> Dog:
         dog = DogSQLModelEntity(
-            name=cmd.name, age=cmd.age, photo=cmd.photo, species=cmd.species
+            name=cmd.name,
+            age=cmd.age,
+            photo=cmd.photo,
+            species=cmd.species,
+            daily_walk_goal=cmd.daily_walk_goal,
+            meal_pattern=cmd.meal_pattern,
         )
         print(dog)
 
@@ -64,6 +71,10 @@ class DogSQLModelRepository(DogRepository):
             dog.photo = cmd.photo
         if cmd.species is not None:
             dog.species = cmd.species
+        if cmd.daily_walk_goal is not None:
+            dog.daily_walk_goal = cmd.daily_walk_goal
+        if cmd.meal_pattern is not None:
+            dog.meal_pattern = cmd.meal_pattern
 
         self.session.commit()
         self.session.refresh(dog)
@@ -75,7 +86,7 @@ class DogSQLModelRepository(DogRepository):
 
         self.session.delete(dog)
         self.session.commit()
-    
+
     async def _get_by_id(self, id: str) -> DogSQLModelEntity:
         dog = self.session.get(DogSQLModelEntity, id)
         if not dog:

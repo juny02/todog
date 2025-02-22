@@ -15,9 +15,17 @@ class DogSpecies(str, Enum):
     LABRADOR = "labrador"
     CHIHUAHUA = "chihuahua"
 
+class DogMealPattern(str, Enum):
+    ONE_MEAL = "one_meal"
+    TWO_MEALS = "two_meals"
+    THREE_MEALS = "three_meals"
+    FREE_FEEDING = "free_feeding"
 
 class Dog(BaseModel):
     id: str
     name: str
     age: int | None
     photo: str | None
+    species: str | None
+    daily_walk_goal: int
+    meal_pattern: DogMealPattern

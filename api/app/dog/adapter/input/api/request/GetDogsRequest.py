@@ -1,7 +1,5 @@
 from pydantic import BaseModel, ConfigDict
 
-from app.dog.domain.Dog import DogSpecies
-
 
 class GetDogsRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)

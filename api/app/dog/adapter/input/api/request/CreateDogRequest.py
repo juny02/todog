@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 
-from app.dog.domain.Dog import DogSpecies
+from app.dog.domain.Dog import DogMealPattern
 
 
 class CreateDogRequest(BaseModel):
@@ -10,3 +10,6 @@ class CreateDogRequest(BaseModel):
     age: int | None = None
     photo: str | None = None
     species: str | None = None
+    daily_walk_goal: int
+    meal_pattern: DogMealPattern
+    

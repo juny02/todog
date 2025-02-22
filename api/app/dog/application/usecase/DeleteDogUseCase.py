@@ -1,5 +1,8 @@
 from fastapi import Depends
-from app.dog.adapter.output.persistence.repository.DogSQLModelRepository import DogSQLModelRepository
+
+from app.dog.adapter.output.persistence.repository.DogSQLModelRepository import (
+    DogSQLModelRepository,
+)
 from app.dog.application.port.output.repository.DogRepository import DogRepository
 from app.dog.domain import Dog
 
