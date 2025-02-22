@@ -27,33 +27,19 @@ async def post_treat(
     create_treat: CreateTreatUseCase = Depends()
 ):
     cmd = CreateTreatCommand(dog_id=dog_id, **body.model_dump())
-    try:
-        return await create_treat(cmd)
-    except DogNotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-
-
+    return await create_treat(cmd)
+    
 @router.get("/{dog_id}/treats", response_model=List[GetTreatResponse])
 async def get_treats_by_dog(
     *, dog_id: str, get_treats: GetTreatsByDogUseCase = Depends()
 ):
-    try:
-        return await get_treats(dog_id)
-    except DogNotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-
+    return await get_treats(dog_id)
 
 @router.get("/{dog_id}/treats/{treat_id}", response_model=GetTreatResponse)
 async def get_treat(
     *, dog_id: str, treat_id: str, get_by_id: GetTreatUseCase = Depends()
 ):
-    try:
-        return await get_by_id(id=treat_id, dog_id=dog_id)
-    except TreatNotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    except TreatOwnershipError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
+    return await get_by_id(id=treat_id, dog_id=dog_id)
 
 @router.patch("/{dog_id}/treats/{treat_id}", response_model=GetTreatResponse)
 async def patch_treat(
@@ -64,21 +50,10 @@ async def patch_treat(
     update: UpdateTreatUseCase = Depends()
 ):
     cmd = UpdateTreatCommand(id=treat_id, dog_id=dog_id, **body.model_dump())
-    try:
-        return await update(cmd)
-    except TreatNotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    except TreatOwnershipError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
-
+    return await update(cmd)
 
 @router.delete("/{dog_id}/treats/{treat_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_treat(
     *, dog_id: str, treat_id: str, delete: DeleteTreatUseCase = Depends()
 ):
-    try:
-        await delete(id=treat_id, dog_id=dog_id)
-    except TreatNotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
-    except TreatOwnershipError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    await delete(id=treat_id, dog_id=dog_id)
