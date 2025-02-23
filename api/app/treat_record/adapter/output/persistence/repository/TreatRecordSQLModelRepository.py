@@ -1,7 +1,7 @@
 from typing import List
 
 from fastapi import Depends
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 
 from app.dog.adapter.output.persistence.repository.DogSQLModelRepository import (
     DogSQLModelRepository,
@@ -27,6 +27,9 @@ from app.treat_record.application.error.TreatRecordOwnershipError import (
 from app.treat_record.application.port.input.CreateTreatRecordCommand import (
     CreateTreatRecordCommand,
 )
+from app.treat_record.application.port.input.GetTreatRecordsCommand import (
+    GetTreatRecordsCommand,
+)
 from app.treat_record.application.port.input.UpdateTreatRecordCommand import (
     UpdateTreatRecordCommand,
 )
@@ -39,6 +42,7 @@ from app.user.adapter.output.persistence.repository.UserSQLModelRepository impor
 )
 from app.user.application.error.UserNotFoundError import UserNotFoundError
 from core.db.dependency import get_session
+from core.enums import SortOrder
 
 
 class TreatRecordSQLModelRepository(TreatRecordRepository):
@@ -87,13 +91,44 @@ class TreatRecordSQLModelRepository(TreatRecordRepository):
         treat_record = await self._get_by_id_for_dog(id=id, dog_id=dog_id)
         return self.mapper.map_to_domain(treat_record)
 
-    async def get_all_by_dog(self, dog_id: str) -> List[TreatRecord]:
+    async def get_all(self, cmd: GetTreatRecordsCommand) -> List[TreatRecord]:
 
-        if await self.dog_repo.get(dog_id) is None:
-            raise DogNotFoundError(f"Dog with id '{dog_id}' does not exist.")
+        if await self.dog_repo.get(cmd.dog_id) is None:
+            raise DogNotFoundError(f"Dog with id '{cmd.dog_id}' does not exist.")
 
         statement = select(TreatRecordSQLModelEntity)
-        statement = statement.where(TreatRecordSQLModelEntity.dog_id == dog_id)
+        statement = statement.where(TreatRecordSQLModelEntity.dog_id == cmd.dog_id)
+
+        if cmd.start:
+            statement = statement.where(
+                col(TreatRecordSQLModelEntity.given_at) >= cmd.start
+            )
+        if cmd.end:
+            statement = statement.where(
+                col(TreatRecordSQLModelEntity.given_at) <= cmd.end
+            )
+
+        if cmd.user_id:
+            statement = statement.where(
+                TreatRecordSQLModelEntity.user_id == cmd.user_id
+            )
+        if cmd.treat_id:
+            statement = statement.where(
+                TreatRecordSQLModelEntity.treat_id == cmd.treat_id
+            )
+        if cmd.description:
+            statement = statement.where(
+                col(TreatRecordSQLModelEntity.description).contains(cmd.description)
+            )
+
+        if cmd.order == SortOrder.DESC:
+            statement = statement.order_by(
+                col(TreatRecordSQLModelEntity.given_at).desc()
+            )
+        else:
+            statement = statement.order_by(
+                col(TreatRecordSQLModelEntity.given_at).asc()
+            )
 
         treat_records = self.session.exec(statement).all()
 
@@ -122,7 +157,6 @@ class TreatRecordSQLModelRepository(TreatRecordRepository):
             treat_record.description = cmd.description
         if cmd.photo_url is not None:
             treat_record.photo_url = cmd.photo_url
-
 
         self.session.commit()
         self.session.refresh(treat_record)

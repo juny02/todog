@@ -5,6 +5,9 @@ from fastapi import APIRouter, Depends, status
 from app.treat_record.adapter.input.api.request.CreateTreatRecordRequest import (
     CreateTreatRecordRequest,
 )
+from app.treat_record.adapter.input.api.request.GetTreatRecordsRequest import (
+    GetTreatRecordsRequest,
+)
 from app.treat_record.adapter.input.api.request.UpdateTreatRecordRequest import (
     UpdateTreatRecordRequest,
 )
@@ -14,16 +17,25 @@ from app.treat_record.adapter.input.api.response.GetTreatRecordResponse import (
 from app.treat_record.application.port.input.CreateTreatRecordCommand import (
     CreateTreatRecordCommand,
 )
+from app.treat_record.application.port.input.GetTreatRecordsCommand import GetTreatRecordsCommand
 from app.treat_record.application.port.input.UpdateTreatRecordCommand import (
     UpdateTreatRecordCommand,
 )
-from app.treat_record.application.usecase.CreateTreatRecordUseCase import CreateTreatRecordUseCase
-from app.treat_record.application.usecase.DeleteTreatRecordUseCase import DeleteTreatRecordUseCase
-from app.treat_record.application.usecase.GetTreatRecordsByDogUseCase import (
-    GetTreatRecordsByDogUseCase,
+from app.treat_record.application.usecase.CreateTreatRecordUseCase import (
+    CreateTreatRecordUseCase,
 )
-from app.treat_record.application.usecase.GetTreatRecordUseCase import GetTreatRecordUseCase
-from app.treat_record.application.usecase.UpdateTreatRecordUseCase import UpdateTreatRecordUseCase
+from app.treat_record.application.usecase.DeleteTreatRecordUseCase import (
+    DeleteTreatRecordUseCase,
+)
+from app.treat_record.application.usecase.GetTreatRecordsUseCase import (
+    GetTreatRecordsUseCase,
+)
+from app.treat_record.application.usecase.GetTreatRecordUseCase import (
+    GetTreatRecordUseCase,
+)
+from app.treat_record.application.usecase.UpdateTreatRecordUseCase import (
+    UpdateTreatRecordUseCase,
+)
 
 router = APIRouter(prefix="/dogs", tags=["TreatRecord"])
 
@@ -37,20 +49,31 @@ async def post_treat_record(
 ):
     cmd = CreateTreatRecordCommand(dog_id=dog_id, **body.model_dump())
     return await create_treat_record(cmd)
-    
+
+
 @router.get("/{dog_id}/treat_records", response_model=List[GetTreatRecordResponse])
 async def get_treat_records_by_dog(
-    *, dog_id: str, get_treat_records: GetTreatRecordsByDogUseCase = Depends()
+    *,
+    dog_id: str,
+    query: GetTreatRecordsRequest = Depends(),
+    get_treat_records: GetTreatRecordsUseCase = Depends()
 ):
-    return await get_treat_records(dog_id)
+    cmd = GetTreatRecordsCommand(dog_id=dog_id, **query.model_dump())
+    return await get_treat_records(cmd)
 
-@router.get("/{dog_id}/treat_records/{treat_record_id}", response_model=GetTreatRecordResponse)
+
+@router.get(
+    "/{dog_id}/treat_records/{treat_record_id}", response_model=GetTreatRecordResponse
+)
 async def get_treat_record(
     *, dog_id: str, treat_record_id: str, get_by_id: GetTreatRecordUseCase = Depends()
 ):
     return await get_by_id(id=treat_record_id, dog_id=dog_id)
 
-@router.patch("/{dog_id}/treat_records/{treat_record_id}", response_model=GetTreatRecordResponse)
+
+@router.patch(
+    "/{dog_id}/treat_records/{treat_record_id}", response_model=GetTreatRecordResponse
+)
 async def patch_treat_record(
     *,
     dog_id: str,
@@ -58,10 +81,15 @@ async def patch_treat_record(
     body: UpdateTreatRecordRequest,
     update: UpdateTreatRecordUseCase = Depends()
 ):
-    cmd = UpdateTreatRecordCommand(id=treat_record_id, dog_id=dog_id, **body.model_dump())
+    cmd = UpdateTreatRecordCommand(
+        id=treat_record_id, dog_id=dog_id, **body.model_dump()
+    )
     return await update(cmd)
 
-@router.delete("/{dog_id}/treat_records/{treat_record_id}", status_code=status.HTTP_204_NO_CONTENT)
+
+@router.delete(
+    "/{dog_id}/treat_records/{treat_record_id}", status_code=status.HTTP_204_NO_CONTENT
+)
 async def delete_treat_record(
     *, dog_id: str, treat_record_id: str, delete: DeleteTreatRecordUseCase = Depends()
 ):

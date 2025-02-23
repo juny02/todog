@@ -1,8 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from app.treat_record.application.port.input.CreateTreatRecordCommand import CreateTreatRecordCommand
-from app.treat_record.application.port.input.UpdateTreatRecordCommand import UpdateTreatRecordCommand
+from app.treat_record.application.port.input.CreateTreatRecordCommand import (
+    CreateTreatRecordCommand,
+)
+from app.treat_record.application.port.input.UpdateTreatRecordCommand import (
+    UpdateTreatRecordCommand,
+)
 from app.treat_record.domain.TreatRecord import TreatRecord
 
 
@@ -16,7 +20,7 @@ class TreatRecordRepository(ABC):
         pass
     
     @abstractmethod
-    async def get_all_by_dog(self, dog_id: str) -> List[TreatRecord]:
+    async def get_all(self, dog_id: str) -> List[TreatRecord]:
         pass
 
 
