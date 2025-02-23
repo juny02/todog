@@ -1,14 +1,17 @@
 from typing import List
 
 from fastapi import Depends
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 
 from app.dog.adapter.output.persistence.repository.DogSQLModelRepository import (
     DogSQLModelRepository,
 )
 from app.dog.application.error.DogNotFoundError import DogNotFoundError
 from app.dog.application.port.output.repository.DogRepository import DogRepository
-
+from app.user.adapter.output.persistence.repository.UserSQLModelRepository import (
+    UserSQLModelRepository,
+)
+from app.user.application.error.UserNotFoundError import UserNotFoundError
 from app.walk_record.adapter.output.persistence.entities.WalkRecordMapper import (
     WalkRecordMapper,
 )
@@ -24,6 +27,9 @@ from app.walk_record.application.error.WalkRecordOwnershipError import (
 from app.walk_record.application.port.input.CreateWalkRecordCommand import (
     CreateWalkRecordCommand,
 )
+from app.walk_record.application.port.input.GetWalkRecordsCommand import (
+    GetWalkRecordsCommand,
+)
 from app.walk_record.application.port.input.UpdateWalkRecordCommand import (
     UpdateWalkRecordCommand,
 )
@@ -31,11 +37,8 @@ from app.walk_record.application.port.output.repository.WalkRecordRepository imp
     WalkRecordRepository,
 )
 from app.walk_record.domain.WalkRecord import WalkRecord
-from app.user.adapter.output.persistence.repository.UserSQLModelRepository import (
-    UserSQLModelRepository,
-)
-from app.user.application.error.UserNotFoundError import UserNotFoundError
 from core.db.dependency import get_session
+from core.enums import SortOrder
 
 
 class WalkRecordSQLModelRepository(WalkRecordRepository):
@@ -78,13 +81,38 @@ class WalkRecordSQLModelRepository(WalkRecordRepository):
         walk_record = await self._get_by_id_for_dog(id=id, dog_id=dog_id)
         return self.mapper.map_to_domain(walk_record)
 
-    async def get_all_by_dog(self, dog_id: str) -> List[WalkRecord]:
+    async def get_all(self, cmd: GetWalkRecordsCommand) -> List[WalkRecord]:
 
-        if await self.dog_repo.get(dog_id) is None:
-            raise DogNotFoundError(f"Dog with id '{dog_id}' does not exist.")
+        if await self.dog_repo.get(cmd.dog_id) is None:
+            raise DogNotFoundError(f"Dog with id '{cmd.dog_id}' does not exist.")
 
         statement = select(WalkRecordSQLModelEntity)
-        statement = statement.where(WalkRecordSQLModelEntity.dog_id == dog_id)
+        statement = statement.where(WalkRecordSQLModelEntity.dog_id == cmd.dog_id)
+
+        if cmd.start:
+            statement = statement.where(
+                col(WalkRecordSQLModelEntity.start_time) >= cmd.start
+            )
+        if cmd.end:
+            statement = statement.where(
+                col(WalkRecordSQLModelEntity.start_time) <= cmd.end
+            )
+
+        if cmd.user_id:
+            statement = statement.where(WalkRecordSQLModelEntity.user_id == cmd.user_id)
+        if cmd.description:
+            statement = statement.where(
+                col(WalkRecordSQLModelEntity.description).contains(cmd.description)
+            )
+
+        if cmd.order == SortOrder.DESC:
+            statement = statement.order_by(
+                col(WalkRecordSQLModelEntity.start_time).desc()
+            )
+        else:
+            statement = statement.order_by(
+                col(WalkRecordSQLModelEntity.start_time).asc()
+            )
 
         walk_records = self.session.exec(statement).all()
 

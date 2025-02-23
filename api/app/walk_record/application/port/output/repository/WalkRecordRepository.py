@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from app.walk_record.application.port.input.CreateWalkRecordCommand import CreateWalkRecordCommand
+from app.walk_record.application.port.input.GetWalkRecordsCommand import GetWalkRecordsCommand
 from app.walk_record.application.port.input.UpdateWalkRecordCommand import UpdateWalkRecordCommand
 from app.walk_record.domain.WalkRecord import WalkRecord
 
@@ -16,7 +17,7 @@ class WalkRecordRepository(ABC):
         pass
     
     @abstractmethod
-    async def get_all_by_dog(self, dog_id: str) -> List[WalkRecord]:
+    async def get_all(self, cmd: GetWalkRecordsCommand) -> List[WalkRecord]:
         pass
 
 
