@@ -19,6 +19,9 @@ from app.meal_record.adapter.input.api.error_handlers import error_handlers as m
 from app.memo.adapter.input.api.router import router as memo_router
 from app.memo.adapter.input.api.error_handlers import error_handlers as memo_error_handlers
 
+from app.schedule.adapter.input.api.router import router as schedule_router
+from app.schedule.adapter.input.api.error_handlers import error_handlers as schedule_error_handlers
+
 
 
 app = FastAPI(title="ToDOG API")
@@ -41,6 +44,10 @@ for exc, handler in meal_records_error_handlers.items():
 for exc, handler in memo_error_handlers.items():
     app.add_exception_handler(exc, handler)
 
+for exc, handler in schedule_error_handlers.items():
+    app.add_exception_handler(exc, handler)
+
+
 
 @app.get("/health") 
 def check_health(): 
@@ -54,3 +61,4 @@ app.include_router(treat_record_router)
 app.include_router(walk_record_router)
 app.include_router(meal_record_router)
 app.include_router(memo_router)
+app.include_router(schedule_router)

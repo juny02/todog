@@ -12,6 +12,7 @@ from app.treat_record.adapter.output.persistence.entities.TreatRecordSQLModelEnt
 from app.walk_record.adapter.output.persistence.entities.WalkRecordSQLModelEntity import WalkRecordSQLModelEntity
 from app.meal_record.adapter.output.persistence.entities.MealRecordSQLModelEntity import MealRecordSQLModelEntity
 from app.memo.adapter.output.persistence.entities.MemoSQLModelEntity import MemoSQLModelEntity
+from app.schedule.adapter.output.persistence.entities.ScheduleSQLModelEntity import ScheduleSQLModelEntity
 
 
 from sqlmodel import SQLModel
