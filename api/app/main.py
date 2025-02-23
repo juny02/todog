@@ -1,20 +1,20 @@
 from fastapi import FastAPI
 
-from app.dog.adapter.input.router import router as dog_router
-from app.user.adapter.input.router import router as user_router
-from app.user.adapter.input.error_handlers import error_handlers as user_error_handlers
-from app.dog_family.adapter.input.router import router as dog_fam_router
-from app.treat.adapter.input.router import router as treat_router
-from app.treat.adapter.input.error_handlers import error_handlers as treat_error_handlers
+from app.dog.adapter.input.api.router import router as dog_router
+from app.user.adapter.input.api.router import router as user_router
+from app.user.adapter.input.api.error_handlers import error_handlers as user_error_handlers
+from app.dog_family.adapter.input.api.router import router as dog_fam_router
+from app.treat.adapter.input.api.router import router as treat_router
+from app.treat.adapter.input.api.error_handlers import error_handlers as treat_error_handlers
 
-from app.treat_record.adapter.input.router import router as treat_record_router
-from app.treat_record.adapter.input.error_handlers import error_handlers as treat_records_error_handlers
+from app.treat_record.adapter.input.api.router import router as treat_record_router
+from app.treat_record.adapter.input.api.error_handlers import error_handlers as treat_records_error_handlers
 
-from app.walk_record.adapter.input.router import router as walk_record_router
-from app.walk_record.adapter.input.error_handlers import error_handlers as walk_records_error_handlers
+from app.walk_record.adapter.input.api.router import router as walk_record_router
+from app.walk_record.adapter.input.api.error_handlers import error_handlers as walk_records_error_handlers
 
-from app.meal_record.adapter.input.router import router as meal_record_router
-from app.meal_record.adapter.input.error_handlers import error_handlers as meal_records_error_handlers
+from app.meal_record.adapter.input.api.router import router as meal_record_router
+from app.meal_record.adapter.input.api.error_handlers import error_handlers as meal_records_error_handlers
 
 from app.memo.adapter.input.api.router import router as memo_router
 from app.memo.adapter.input.api.error_handlers import error_handlers as memo_error_handlers
