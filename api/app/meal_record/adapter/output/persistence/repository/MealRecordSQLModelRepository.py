@@ -1,15 +1,13 @@
 from typing import List
 
 from fastapi import Depends
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 
-from app.meal_record.application.error.MealRecordOwnershipError import MealRecordOwnershipError
 from app.dog.adapter.output.persistence.repository.DogSQLModelRepository import (
     DogSQLModelRepository,
 )
 from app.dog.application.error.DogNotFoundError import DogNotFoundError
 from app.dog.application.port.output.repository.DogRepository import DogRepository
-
 from app.meal_record.adapter.output.persistence.entities.MealRecordMapper import (
     MealRecordMapper,
 )
@@ -19,10 +17,11 @@ from app.meal_record.adapter.output.persistence.entities.MealRecordSQLModelEntit
 from app.meal_record.application.error.MealRecordNotFoundError import (
     MealRecordNotFoundError,
 )
-
+from app.meal_record.application.error.MealRecordOwnershipError import MealRecordOwnershipError
 from app.meal_record.application.port.input.CreateMealRecordCommand import (
     CreateMealRecordCommand,
 )
+from app.meal_record.application.port.input.GetMealRecordsCommand import GetMealRecordsCommand
 from app.meal_record.application.port.input.UpdateMealRecordCommand import (
     UpdateMealRecordCommand,
 )
@@ -35,6 +34,7 @@ from app.user.adapter.output.persistence.repository.UserSQLModelRepository impor
 )
 from app.user.application.error.UserNotFoundError import UserNotFoundError
 from core.db.dependency import get_session
+from core.enums import SortOrder
 
 
 class MealRecordSQLModelRepository(MealRecordRepository):
@@ -78,13 +78,33 @@ class MealRecordSQLModelRepository(MealRecordRepository):
         meal_record = await self._get_by_id_for_dog(id=id, dog_id=dog_id)
         return self.mapper.map_to_domain(meal_record)
 
-    async def get_all_by_dog(self, dog_id: str) -> List[MealRecord]:
+    async def get_all(self, cmd: GetMealRecordsCommand) -> List[MealRecord]:
 
-        if await self.dog_repo.get(dog_id) is None:
-            raise DogNotFoundError(f"Dog with id '{dog_id}' does not exist.")
+        if await self.dog_repo.get(cmd.dog_id) is None:
+            raise DogNotFoundError(f"Dog with id '{cmd.dog_id}' does not exist.")
 
         statement = select(MealRecordSQLModelEntity)
-        statement = statement.where(MealRecordSQLModelEntity.dog_id == dog_id)
+        statement = statement.where(MealRecordSQLModelEntity.dog_id == cmd.dog_id)
+        
+        if cmd.start:
+            statement = statement.where(col(MealRecordSQLModelEntity.given_at) >= cmd.start)
+        if cmd.end:
+            statement = statement.where(col(MealRecordSQLModelEntity.given_at) <= cmd.end)
+        
+        if cmd.user_id:
+            statement = statement.where(MealRecordSQLModelEntity.user_id == cmd.user_id)
+        if cmd.meal_type:
+            statement = statement.where(MealRecordSQLModelEntity.meal_type == cmd.meal_type)
+        if cmd.description:
+            statement = statement.where(
+                col(MealRecordSQLModelEntity.description).contains(cmd.description)
+            )
+            
+        if cmd.order == SortOrder.DESC:
+            statement = statement.order_by(col(MealRecordSQLModelEntity.given_at).desc())
+        else:
+            statement = statement.order_by(col(MealRecordSQLModelEntity.given_at).asc())
+
 
         meal_records = self.session.exec(statement).all()
 

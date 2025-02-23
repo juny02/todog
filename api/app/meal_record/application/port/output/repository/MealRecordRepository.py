@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from app.meal_record.application.port.input.CreateMealRecordCommand import CreateMealRecordCommand
+from app.meal_record.application.port.input.GetMealRecordsCommand import GetMealRecordsCommand
 from app.meal_record.application.port.input.UpdateMealRecordCommand import UpdateMealRecordCommand
 from app.meal_record.domain.MealRecord import MealRecord
 
@@ -16,7 +17,7 @@ class MealRecordRepository(ABC):
         pass
     
     @abstractmethod
-    async def get_all_by_dog(self, dog_id: str) -> List[MealRecord]:
+    async def get_all(self, cmd: GetMealRecordsCommand) -> List[MealRecord]:
         pass
 
 
