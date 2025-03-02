@@ -14,6 +14,7 @@ from app.meal_record.adapter.output.persistence.entities.MealRecordSQLModelEntit
 from app.memo.adapter.output.persistence.entities.MemoSQLModelEntity import MemoSQLModelEntity
 from app.schedule.adapter.output.persistence.entities.ScheduleSQLModelEntity import ScheduleSQLModelEntity
 from app.medicine_schedule.adapter.output.persistence.entities.MedScheduleSQLModelEntity import MedScheduleSQLModelEntity
+from app.medicine_record.adapter.output.persistence.entities.MedRecordSQLModelEntity import MedRecordSQLModelEntity
 
 
 from sqlmodel import SQLModel
