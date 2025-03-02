@@ -10,14 +10,13 @@ services:
       - ./api/core/db:/opt/api/core/db
     ports:
       - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       timeout: 5s
-    command: >
-      /opt/api/.venv/bin/uvicorn app.main:app
-      --host 0.0.0.0
-      --port 8080
-      --reload
+    command: bash start.dev.sh
   
   db:
     container_name: db
@@ -28,4 +27,9 @@ services:
       - ./db/mysql/dev:/var/lib/mysql
     env_file:
       - ./db/.env.dev
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p${MYSQL_ROOT_PASSWORD} || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
     
